@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Drive Access</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    video {
+      width: 400px;
+      margin-top: 20px;
+      display: none;
+      border-radius: 10px;
+      border: 3px solid white;
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      background-color: #00c853;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome to Smart Drive Access</h1>
+  <p id="status">Click the button to begin camera verification</p>
+
+  <video id="cameraFeed" autoplay></video>
+  <button onclick="startVerification()">Open Camera</button>
+
+  <script>
+    function startVerification() {
+      const video = document.getElementById("cameraFeed");
+      const status = document.getElementById("status");
+
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          video.srcObject = stream;
+          video.style.display = 'block';
+          status.innerText = "Verifying face and license...";
+
+          // Simulate processing
+          setTimeout(() => {
+            const scenario = Math.floor(Math.random() * 3); // 0, 1, or 2
+
+            if (scenario === 0) {
+              window.location.href = "not_matched.html";
+            } else if (scenario === 1) {
+              window.location.href = "valid_licence.html";
+            } else {
+              window.location.href = "invalid_licence.html";
+            }
+          }, 4000);
+        })
+        .catch(error => {
+          status.innerText = "Camera access denied.";
+        });
+    }
+  </script>
+</body>
+</html>
